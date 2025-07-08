@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 QualiLead – AI-Powered B2B Lead Scoring System
 
-## Getting Started
+QualiLead is an intelligent lead scoring system that leverages machine learning and generative AI to help sales teams prioritize high-conversion B2B leads. Built on real-time data from Product Hunt and enriched with third-party insights, it blends explainability, scoring, and automation to streamline outbound efforts.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔍 Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🎯 **Objective:** Score and rank B2B leads by predicted conversion potential.
+- 🧠 **Model:** Random Forest Classifier with SHAP-based feature importance.
+- 🪄 **Explainability:** Google Gemini API generates human-readable summaries.
+- ✉️ **Sales Enablement:** Integrated cold email generation with lead context.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+![image](https://github.com/user-attachments/assets/a5cf5b25-5716-402e-ad1a-41712cbbc05f)
+![image](https://github.com/user-attachments/assets/bbf1eaa3-016b-4f74-96da-3a1ea19a25e1)
+![image](https://github.com/user-attachments/assets/e5d9ab2a-c7f9-4b39-8bf3-d34ab95949af)
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📊 Dataset & Features
 
-## Deploy on Vercel
+- **Source:** Product Hunt
+- **Enrichments:**
+  - LinkedIn followers
+  - Email validation status
+  - Domain age (WHOIS)
+  - Industry type
+  - Employee count
+  - Country of operation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🧾 Key Fields Used:
+| Field             | Description                            |
+|------------------|----------------------------------------|
+| `email_valid`     | Boolean email verification             |
+| `followers`       | LinkedIn/Product Hunt followers count  |
+| `votes`           | Product Hunt upvotes                   |
+| `employee_count`  | Estimated company size                 |
+| `industry`        | Industry category                      |
+| `domain_age`      | Years since domain registration        |
+| `engagement_score`| Combined followers and votes           |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## ⚙️ Preprocessing Pipeline
+
+- ✅ Removed duplicate domains
+- ⚖️ Normalized numeric fields with MinMaxScaler
+- 🔢 One-hot encoded `industry` and `country`
+- 🧮 Engineered `engagement_score` and binned `domain_age`, `employee_count`
+- 🧼 Imputed or dropped missing values based on criticality
+
+---
+
+## 🧠 Model Details
+
+- **Algorithm:** `RandomForestClassifier` (sklearn)
+- **Metrics:**
+
+| Metric    | Value |
+|-----------|--------|
+| Accuracy  | 85%    |
+| Precision | 0.86   |
+| Recall    | 0.83   |
+| ROC AUC   | 0.89   |
+
+- **Baseline models tested:** Logistic Regression, XGBoost (not selected for interpretability reasons)
+
+---
+
+## 📈 Explainability
+
+- **Tool:** SHAP (SHapley Additive Explanations)
+- **Usage:** Visual breakdown of top features contributing to each lead's score
+- **Common Drivers:** Valid email, Product Hunt traction, employee count, domain age
+
+---
+
+## 🤖 AI Reasoning Integration
+
+- **API Used:** [Google Gemini](https://ai.google)
+- **Function:** Generates human-friendly summaries for top leads
+
+> *Example:*  
+> “This lead is high-quality due to strong Product Hunt traction, a verified email address, and a large team (~500 employees).”
+
+---
+
+## ✉️ Cold Email Integration
+
+- Each lead comes with a dynamic `mailto:` link
+- Auto-populates subject and message body
+- Personalized using SHAP + Gemini explanations
+
+---
