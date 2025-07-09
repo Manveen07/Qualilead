@@ -73,11 +73,17 @@ Message:
     const response = await generateScoringReason(prompt);
     console.log(response);
 
-    const newSubject = "Enhancing Packaging Efficiency with Real-Time Data";
-    const newMessage = `I saw that ${companyName} is a key player in the ${industry} industry, and I’m curious as to how you see real-time data changing the landscape. What specific gaps do you think still need solving in terms of packaging efficiency and supply chain management?\n\nWould you be open to a quick chat next Thursday or Friday? Let me know what works.`;
+    if (response.status === 200 && typeof response.text === "string") {
+      const [subjectLine, ...bodyParts] = response.text.split("\n\n");
 
-    setSubject(newSubject);
-    setMessage(newMessage);
+      const subject = subjectLine.replace(/^Subject:\s*/i, "").trim();
+      const message = bodyParts.join("\n\n").trim();
+
+      setSubject(subject);
+      setMessage(message);
+    } else {
+      console.error("❌ Error generating message:", response.error);
+    }
   };
 
   return (
