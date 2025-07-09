@@ -73,11 +73,11 @@ const LeadPage = () => {
       const sampleLeads = await fetchCompanies();
 
       const adjusted = sampleLeads
-        .filter((Lead) => {
+        .filter((Lead: Lead) => {
           if (industry && Lead.industry !== industry) return false;
           return true;
         })
-        .map((lead) => {
+        .map((lead:Lead) => {
           let bonus = 0;
 
           // Safely access and compare company name
