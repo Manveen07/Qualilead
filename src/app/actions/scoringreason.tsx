@@ -56,7 +56,7 @@ export const generateScoringReason = async (userPrompt: string) => {
       console.log("✅ Gemini response text:", text);
       // Success! Return the result and exit the loop.
       return { status: 200, text: text.trim() };
-    } catch (error: any) {
+    } catch (error: unknown) {
       currentRetry++;
       console.warn(
         `❌ Gemini Error (Attempt ${currentRetry}/${maxRetries}):`,
