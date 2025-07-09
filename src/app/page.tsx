@@ -23,9 +23,45 @@ const countrycode: Record<string, string> = {
   "": "",
 };
 
+interface ShapExplanation {
+  feature: string;
+  value: number;
+  impact: number;
+}
+
+interface Lead {
+  cleaned_url: string;
+  company_domain: string;
+  company_name: string;
+  created_at: string;
+  domain_age: number;
+  email_guess: string;
+  email_valid: number;
+  employees: number;
+  founded_recently: number;
+  hq_city: string;
+  hq_country: string;
+  hq_country_freq: number;
+  hq_state: string;
+  industry: string;
+  industry_freq: number;
+  lead_score: number;
+  lead_score_final: number;
+  lead_score_predicted: number;
+  linkedin_enriched: number;
+  linkedin_follower_count: number;
+  linkedin_url: string;
+  reviews_count: number;
+  score_reason: string;
+  shap_explanation: ShapExplanation[];
+  tagline: string;
+  votes_count: number;
+}
+
+
 const LeadsPage = () => {
   const { theme } = useTheme();
-  const [leads, setLeads] = useState<any[]>([]);
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
