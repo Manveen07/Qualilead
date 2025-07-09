@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import NavbarLayout from "../../src/app/components/Navbar";
 import CompanyCard from "@/components/CompanyCard";
 import SearchBar from "../components/Searchbar"; // Optional: if you want it here
-import { readCsvData } from "@/app/actions/readcsvdata";
+
 import { useTheme } from "next-themes";
 
 const countrycode: Record<string, string> = {
