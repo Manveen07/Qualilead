@@ -31,6 +31,26 @@ const BONUS_POINTS = {
   location: 0.04,
 };
 
+interface Lead {
+  adjustedScore: number | undefined;
+  company_name: string;
+  tagline?: string;
+  company_domain?: string;
+  hq_country?: string;
+  hq_city?: string;
+  created_at?: string;
+  linkedin_url?: string;
+  employees?: number;
+  linkedin_follower_count?: number;
+  votes_count?: number;
+  email_guess?: string;
+  lead_score_predicted?: string;
+  score_reason?: string;
+  industry?: string;
+  cleaned_url?: string;
+  reviews_count?: number;
+}
+
 const LeadPage = () => {
   const { theme } = useTheme();
 
@@ -40,25 +60,6 @@ const LeadPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Sample data for demonstration - replace with your actual data
-
-  interface Lead {
-    company_name: string;
-    tagline?: string;
-    company_domain?: string;
-    hq_country?: string;
-    hq_city?: string;
-    created_at?: string;
-    linkedin_url?: string;
-    employees?: number;
-    linkedin_follower_count?: number;
-    votes_count?: number;
-    email_guess?: string;
-    lead_score_predicted?: string;
-    score_reason?: string;
-    industry?: string;
-    cleaned_url?: string;
-    reviews_count?: number;
-  }
 
   const [topLeads, setTopLeads] = useState<Lead[]>([]);
 
@@ -72,16 +73,20 @@ const LeadPage = () => {
     const fetchTopLeads = async () => {
       const sampleLeads = await fetchCompanies();
 
-      const adjusted = sampleLeads
-        .filter((Lead: Lead) => {
+      interface AdjustedLead extends Lead {
+        adjustedScore: number;
+      }
+
+      const adjusted: AdjustedLead[] = sampleLeads
+        .filter((Lead: Lead): boolean => {
           if (industry && Lead.industry !== industry) return false;
           return true;
         })
-        .map((lead:Lead) => {
+        .map((lead: Lead): AdjustedLead => {
           let bonus = 0;
 
           // Safely access and compare company name
-          const companyName = lead.company_name || "";
+          const companyName: string = lead.company_name || "";
           if (
             searchQuery &&
             companyName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -94,11 +99,12 @@ const LeadPage = () => {
 
           // Match size (parse employees as number)
           if (size) {
-            const employeeCount = parseFloat(
+            const employeeCount: number = parseFloat(
               typeof lead.employees === "number"
                 ? lead.employees.toString()
                 : lead.employees || "0"
             );
+
             if (
               (size === "1-10" && employeeCount <= 10) ||
               (size === "11-50" && employeeCount > 10 && employeeCount <= 50) ||
@@ -115,7 +121,7 @@ const LeadPage = () => {
           }
 
           // Match location
-          const hqCountry = lead.hq_country || "";
+          const hqCountry: string = lead.hq_country || "";
           if (
             location &&
             hqCountry.toLowerCase().includes(location.toLowerCase())
@@ -128,7 +134,10 @@ const LeadPage = () => {
             adjustedScore: parseFloat(lead.lead_score_predicted || "0") + bonus,
           };
         })
-        .sort((a, b) => b.adjustedScore - a.adjustedScore)
+        .sort(
+          (a: AdjustedLead, b: AdjustedLead) =>
+            b.adjustedScore - a.adjustedScore
+        )
         .slice(0, 6); // Optional, shows only top 3
 
       setTopLeads(adjusted);
@@ -166,10 +175,17 @@ const LeadPage = () => {
 
           continue;
         }
-        const prompt = makeLeadPrompt(lead);
+        const prompt = makeLeadPrompt({
+          company_name: lead.company_name,
+          lead_score: parseFloat(lead.lead_score_predicted || "0"),
+          adjusted_score: lead.adjustedScore,
+          reviews_count: lead.reviews_count,
+          votes_count: lead.votes_count,
+          // Add other required fields here if needed, mapping from lead
+        });
         const reason = await generateScoringReason(prompt);
         if (reason.status == 200) {
-          await saveScoreReason(lead.company_name, reason.text);
+          await saveScoreReason(lead.company_name, reason.text || "");
 
           setTopLeads((prevLeads) =>
             prevLeads.map((l) =>
@@ -509,7 +525,7 @@ const LeadPage = () => {
                     scoreReason={lead.score_reason}
                     company_domain={lead.cleaned_url || ""}
                     industry={lead.industry || ""}
-                    theme={theme || "dark"}
+                    theme={(theme as "light") || "dark"}
                     reviewCount={lead.reviews_count || 0}
                   />
                 ))}
@@ -532,4 +548,3 @@ const LeadPage = () => {
 };
 
 export default LeadPage;
-
