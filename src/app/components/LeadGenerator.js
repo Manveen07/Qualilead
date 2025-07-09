@@ -9,8 +9,6 @@ import {
   Phone,
   Building,
   MapPin,
-  Star,
-  Filter,
   Download,
   RefreshCw,
   Brain,
