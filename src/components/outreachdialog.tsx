@@ -46,7 +46,7 @@ export default function OutreachDialog({
   const [message, setMessage] = useState("");
 
   const makeprompt =
-    () => `You are a B2B founder or advisor reaching out cold to a decision-maker at ${companyName}, a company in the ${industry} industry.
+    () => `You are a B2B founder or advisor reaching out cold to a decision-maker at ${companyName}, a company in the ${industry} industryand their taglines is ${tagline} and their website is ${website} and location is ${location}.
 
 You are not selling a product. Your goal is to open a conversation, explore mutual interests, or get insights.
 
