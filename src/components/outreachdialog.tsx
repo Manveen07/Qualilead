@@ -30,7 +30,7 @@ export default function OutreachDialog({
   industry,
   tagline,
   website,
-  loaction,
+  location,
 }: {
   email: string;
   companyName: string;
