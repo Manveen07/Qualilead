@@ -21,10 +21,15 @@ import {
   Building,
 } from "lucide-react";
 import HolographicCard from "@/components/CompanyCard";
-// import { readCsvData } from "@/app/actions/readcsvdata";
 
 import { generateScoringReason } from "@/app/actions/scoringreason";
 import { makeLeadPrompt } from "@/app/actions/prompt";
+
+const BONUS_POINTS = {
+  industry: 0.06,
+  size: 0.05,
+  location: 0.04,
+};
 
 const LeadPage = () => {
   const { theme } = useTheme();
@@ -36,13 +41,26 @@ const LeadPage = () => {
 
   // Sample data for demonstration - replace with your actual data
 
-  const BONUS_POINTS = {
-    industry: 0.06,
-    size: 0.05,
-    location: 0.04,
-  };
+  interface Lead {
+    company_name: string;
+    tagline?: string;
+    company_domain?: string;
+    hq_country?: string;
+    hq_city?: string;
+    created_at?: string;
+    linkedin_url?: string;
+    employees?: number;
+    linkedin_follower_count?: number;
+    votes_count?: number;
+    email_guess?: string;
+    lead_score_predicted?: string;
+    score_reason?: string;
+    industry?: string;
+    cleaned_url?: string;
+    reviews_count?: number;
+  }
 
-  const [topLeads, setTopLeads] = useState<any[]>([]);
+  const [topLeads, setTopLeads] = useState<Lead[]>([]);
 
   const fetchCompanies = async () => {
     const res = await fetch("/api/company");
@@ -138,8 +156,6 @@ const LeadPage = () => {
       const top3 = topLeads.slice(0, 3);
       console.log("Top 3 Leads for scoring reason:", topLeads.slice(0, 3));
 
-      const reasons: string[] = [];
-
       for (const lead of top3) {
         if (lead.score_reason && lead.score_reason.length > 0) {
           console.log(`Using existing reason for ${lead.company_name}`);
@@ -154,7 +170,7 @@ const LeadPage = () => {
           setTopLeads((prevLeads) =>
             prevLeads.map((l) =>
               l.company_name === lead.company_name
-                ? { ...l, score_reason: reason.text }
+                ? { ...l, score_reason: reason.text } // ✅ only save the text
                 : l
             )
           );
@@ -489,7 +505,7 @@ const LeadPage = () => {
                     scoreReason={lead.score_reason}
                     company_domain={lead.cleaned_url || ""}
                     industry={lead.industry || ""}
-                    theme={theme}
+                    theme={theme || "dark"}
                     reviewCount={lead.reviews_count || 0}
                   />
                 ))}
@@ -512,3 +528,4 @@ const LeadPage = () => {
 };
 
 export default LeadPage;
+
