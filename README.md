@@ -12,6 +12,7 @@ QualiLead is an intelligent lead scoring system that leverages machine learning 
 - ✉️ **Sales Enablement:** Integrated cold email generation with lead context.
 
 ---
+https://qualilead-git-master-shardys-projects.vercel.app/
 
 ![image](https://github.com/user-attachments/assets/a5cf5b25-5716-402e-ad1a-41712cbbc05f)
 ![image](https://github.com/user-attachments/assets/bbf1eaa3-016b-4f74-96da-3a1ea19a25e1)
