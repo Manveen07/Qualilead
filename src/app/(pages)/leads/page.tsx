@@ -94,7 +94,11 @@ const LeadPage = () => {
 
           // Match size (parse employees as number)
           if (size) {
-            const employeeCount = parseFloat(lead.employees || "0");
+            const employeeCount = parseFloat(
+              typeof lead.employees === "number"
+                ? lead.employees.toString()
+                : lead.employees || "0"
+            );
             if (
               (size === "1-10" && employeeCount <= 10) ||
               (size === "11-50" && employeeCount > 10 && employeeCount <= 50) ||
