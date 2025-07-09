@@ -1,3 +1,10 @@
+type ShapExplanation = {
+  feature: string;
+  value: number;
+  impact: number;
+};
+
+
 export const makeLeadPrompt = ({
   company_name,
   lead_score,
@@ -21,7 +28,7 @@ export const makeLeadPrompt = ({
   domain_age?: number;
   employees?: number;
   industry?: string;
-  shap_explanation?: any;
+  shap_explanation?: ShapExplanation[];
 }) => {
   return `
 You are an AI assistant helping a B2B sales team understand why this lead ranks highly based on predictive signals.
