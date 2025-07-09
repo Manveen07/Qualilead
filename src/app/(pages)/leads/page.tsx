@@ -154,7 +154,7 @@ const LeadPage = () => {
           setTopLeads((prevLeads) =>
             prevLeads.map((l) =>
               l.company_name === lead.company_name
-                ? { ...l, score_reason: reason }
+                ? { ...l, score_reason: reason.text }
                 : l
             )
           );
