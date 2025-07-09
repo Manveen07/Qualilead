@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  
 } from "recharts";
 import {
   TrendingUp,
@@ -24,7 +23,7 @@ import {
 } from "lucide-react";
 
 const FeatureAnalyticsDashboard = () => {
-  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
 
   const featureData = [
     {
@@ -153,7 +152,7 @@ const FeatureAnalyticsDashboard = () => {
     },
   ];
 
-  const getTrendIcon = (trend) => {
+  const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "positive":
         return <TrendingUp className="w-4 h-4 text-green-500" />;
@@ -249,7 +248,7 @@ const FeatureAnalyticsDashboard = () => {
               />
               <YAxis />
               <Tooltip
-                formatter={(value) => [value.toFixed(4), "Importance"]}
+                formatter={(value) => [Number(value).toFixed(4), "Importance"]}
                 labelFormatter={(label) => `Feature: ${label}`}
               />
               <Bar dataKey="importance" fill="#3B82F6" />
@@ -421,3 +420,4 @@ const FeatureAnalyticsDashboard = () => {
 };
 
 export default FeatureAnalyticsDashboard;
+
