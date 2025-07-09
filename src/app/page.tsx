@@ -131,7 +131,7 @@ const LeadsPage = () => {
               scoreReason={lead.score_reason}
               company_domain={lead.cleaned_url || ""}
               industry={lead.industry || ""}
-              theme={theme}
+              theme={theme === "light" || theme === "dark" ? theme : undefined}
               reviewCount={lead.reviews_count || 0}
             />
           ))
