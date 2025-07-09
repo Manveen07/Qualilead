@@ -60,7 +60,7 @@ export const generateScoringReason = async (userPrompt: string) => {
       currentRetry++;
       console.warn(
         `❌ Gemini Error (Attempt ${currentRetry}/${maxRetries}):`,
-        error.message
+        error instanceof Error ? error.message : String(error)
       );
 
       // If this was the last attempt, return the final error
@@ -69,7 +69,7 @@ export const generateScoringReason = async (userPrompt: string) => {
         return {
           status: 500,
           error: `Gemini API error after ${maxRetries} attempts: ${
-            error?.message || "Unknown error"
+            error instanceof Error ? error.message : "Unknown error"
           }`,
         };
       }
