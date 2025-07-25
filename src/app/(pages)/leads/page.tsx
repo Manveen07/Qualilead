@@ -51,6 +51,29 @@ interface Lead {
   reviews_count?: number;
 }
 
+const industries = [
+  { name: "Software Development", emoji: "💻" },
+  { name: "Advertising Services", emoji: "📢" },
+  { name: "IT Services and IT Consulting", emoji: "🧑‍💼" },
+  { name: "Venture Capital and Private Equity Principals", emoji: "💰" },
+  { name: "Staffing and Recruiting", emoji: "🧑‍💻" },
+  { name: "Real Estate", emoji: "🏠" },
+  { name: "Technology, Information and Internet", emoji: "🌐" },
+  { name: "Retail", emoji: "🛍️" },
+  { name: "Motor Vehicle Manufacturing", emoji: "🚗" },
+  { name: "Environmental Services", emoji: "🌱" },
+  { name: "Manufacturing", emoji: "🏭" },
+  { name: "Hospitals and Health Care", emoji: "🏥" },
+  { name: "Business Consulting and Services", emoji: "📊" },
+  { name: "Computer Games", emoji: "🎮" },
+  { name: "Events Services", emoji: "🎉" },
+  { name: "Non-profit Organizations", emoji: "🤝" },
+  { name: "Mental Health Care", emoji: "🧠" },
+  { name: "Automation Machinery Manufacturing", emoji: "🤖" },
+  { name: "Financial Services", emoji: "💳" },
+];
+
+
 const LeadPage = () => {
   const { theme } = useTheme();
 
@@ -129,10 +152,15 @@ const LeadPage = () => {
             bonus += BONUS_POINTS.location;
           }
 
+          bonus = Math.min(bonus, 0.12);
+
+
           return {
             ...lead,
             adjustedScore: parseFloat(lead.lead_score_predicted || "0") + bonus,
           };
+
+
         })
         .sort(
           (a: AdjustedLead, b: AdjustedLead) =>
@@ -166,7 +194,7 @@ const LeadPage = () => {
 
   useEffect(() => {
     const generateReasons = async () => {
-      const top3 = topLeads.slice(0, 3);
+      const top3 = topLeads.slice(0, 6);
       console.log("Top 3 Leads for scoring reason:", topLeads.slice(0, 3));
 
       for (const lead of top3) {
@@ -345,7 +373,7 @@ const LeadPage = () => {
                     <SelectValue placeholder="Select industry" />
                   </SelectTrigger>
                   <SelectContent className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
-                    <SelectItem
+                    {/* <SelectItem
                       value="Software Development"
                       className="text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700"
                     >
@@ -380,7 +408,17 @@ const LeadPage = () => {
                       className="text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700"
                     >
                       🏠 Real Estate
-                    </SelectItem>
+                    </SelectItem> */}
+
+                    {industries.map((item) => (
+  <SelectItem
+    key={item.name}
+    value={item.name}
+    className="text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700"
+  >
+    {item.emoji} {item.name}
+  </SelectItem>
+))}
                   </SelectContent>
                 </Select>
               </div>
